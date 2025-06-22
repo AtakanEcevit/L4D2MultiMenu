@@ -1,1 +1,6 @@
-# ConsoleApp1
+L4D2MultiMenu
+Copyright (c) 2025 Atakan Ecevit. All Rights Reserved.
+
+This code is provided for educational reference only. You may not copy, reproduce,
+modify, or distribute this code in any form without explicit written permission 
+from the author.
