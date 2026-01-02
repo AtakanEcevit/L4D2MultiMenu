@@ -319,7 +319,6 @@ namespace L4D2Menu
         }
         private Vector3 AddRandomOffset(Vector3 angles, float maxOffset = 1.5f)
         {
-            Random rng = new Random();
             float offsetX = (float)(rng.NextDouble() * maxOffset * 2 - maxOffset);
             float offsetY = (float)(rng.NextDouble() * maxOffset * 2 - maxOffset);
 
