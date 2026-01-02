@@ -40,32 +40,92 @@ namespace L4D2MultiMenu
             {
                 if (ImGui.BeginTabItem("General"))
                 {
-                    ImGui.Checkbox("ESP", ref settings.EnableEsp);
+                    bool enableEsp = settings.EnableEsp;
+                    if (ImGui.Checkbox("ESP", ref enableEsp))
+                    {
+                        settings.EnableEsp = enableEsp;
+                    }
                     if (settings.EnableEsp)
                     {
                         ImGui.SameLine();
-                        ImGui.Checkbox("Show health", ref settings.EnableHealthText);
+                        bool enableHealthText = settings.EnableHealthText;
+                        if (ImGui.Checkbox("Show health", ref enableHealthText))
+                        {
+                            settings.EnableHealthText = enableHealthText;
+                        }
                     }
-                    ImGui.Checkbox("AutoShove", ref settings.EnableAutoShove);
+                    bool enableAutoShove = settings.EnableAutoShove;
+                    if (ImGui.Checkbox("AutoShove", ref enableAutoShove))
+                    {
+                        settings.EnableAutoShove = enableAutoShove;
+                    }
                     ImGui.EndTabItem();
                 }
 
                 if (ImGui.BeginTabItem("Color Settings"))
                 {
-                    ImGui.ColorPicker4("Survivor Color", ref settings.SurvivorColor);
-                    ImGui.Checkbox("Survivor Line", ref settings.SurvivorLineEnable);
-                    ImGui.Checkbox("Survivor Box", ref settings.SurvivorBoxEnable);
-                    ImGui.Checkbox("Survivor Dot", ref settings.SurvivorDotEnable);
+                    Vector4 survivorColor = settings.SurvivorColor;
+                    if (ImGui.ColorPicker4("Survivor Color", ref survivorColor))
+                    {
+                        settings.SurvivorColor = survivorColor;
+                    }
+                    bool survivorLineEnable = settings.SurvivorLineEnable;
+                    if (ImGui.Checkbox("Survivor Line", ref survivorLineEnable))
+                    {
+                        settings.SurvivorLineEnable = survivorLineEnable;
+                    }
+                    bool survivorBoxEnable = settings.SurvivorBoxEnable;
+                    if (ImGui.Checkbox("Survivor Box", ref survivorBoxEnable))
+                    {
+                        settings.SurvivorBoxEnable = survivorBoxEnable;
+                    }
+                    bool survivorDotEnable = settings.SurvivorDotEnable;
+                    if (ImGui.Checkbox("Survivor Dot", ref survivorDotEnable))
+                    {
+                        settings.SurvivorDotEnable = survivorDotEnable;
+                    }
 
-                    ImGui.ColorPicker4("Special Infected Color", ref settings.SpecialInfectedColor);
-                    ImGui.Checkbox("Special Infected Line", ref settings.SpecialInfectedLineEnable);
-                    ImGui.Checkbox("Special Infected Box", ref settings.SpecialInfectedBoxEnable);
-                    ImGui.Checkbox("Special Infected Dot", ref settings.SpecialInfectedDotEnable);
+                    Vector4 specialInfectedColor = settings.SpecialInfectedColor;
+                    if (ImGui.ColorPicker4("Special Infected Color", ref specialInfectedColor))
+                    {
+                        settings.SpecialInfectedColor = specialInfectedColor;
+                    }
+                    bool specialInfectedLineEnable = settings.SpecialInfectedLineEnable;
+                    if (ImGui.Checkbox("Special Infected Line", ref specialInfectedLineEnable))
+                    {
+                        settings.SpecialInfectedLineEnable = specialInfectedLineEnable;
+                    }
+                    bool specialInfectedBoxEnable = settings.SpecialInfectedBoxEnable;
+                    if (ImGui.Checkbox("Special Infected Box", ref specialInfectedBoxEnable))
+                    {
+                        settings.SpecialInfectedBoxEnable = specialInfectedBoxEnable;
+                    }
+                    bool specialInfectedDotEnable = settings.SpecialInfectedDotEnable;
+                    if (ImGui.Checkbox("Special Infected Dot", ref specialInfectedDotEnable))
+                    {
+                        settings.SpecialInfectedDotEnable = specialInfectedDotEnable;
+                    }
 
-                    ImGui.ColorPicker4("Common Infected Color", ref settings.CommonInfectedColor);
-                    ImGui.Checkbox("Common Infected Line", ref settings.CommonInfectedLineEnable);
-                    ImGui.Checkbox("Common Infected Box", ref settings.CommonInfectedBoxEnable);
-                    ImGui.Checkbox("Common Infected Dot", ref settings.CommonInfectedDotEnable);
+                    Vector4 commonInfectedColor = settings.CommonInfectedColor;
+                    if (ImGui.ColorPicker4("Common Infected Color", ref commonInfectedColor))
+                    {
+                        settings.CommonInfectedColor = commonInfectedColor;
+                    }
+                    bool commonInfectedLineEnable = settings.CommonInfectedLineEnable;
+                    if (ImGui.Checkbox("Common Infected Line", ref commonInfectedLineEnable))
+                    {
+                        settings.CommonInfectedLineEnable = commonInfectedLineEnable;
+                    }
+                    bool commonInfectedBoxEnable = settings.CommonInfectedBoxEnable;
+                    if (ImGui.Checkbox("Common Infected Box", ref commonInfectedBoxEnable))
+                    {
+                        settings.CommonInfectedBoxEnable = commonInfectedBoxEnable;
+                    }
+                    bool commonInfectedDotEnable = settings.CommonInfectedDotEnable;
+                    if (ImGui.Checkbox("Common Infected Dot", ref commonInfectedDotEnable))
+                    {
+                        settings.CommonInfectedDotEnable = commonInfectedDotEnable;
+                    }
 
                     ImGui.EndTabItem();
                 }
