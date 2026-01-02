@@ -248,7 +248,7 @@ namespace L4D2Menu
                 }
                 else if (entity.teamNum == INFECTED_TEAM)
                 {
-                    if (entity.name.Contains("inf"))
+                    if (entity.name.Contains("inf", StringComparison.OrdinalIgnoreCase))
                     {
                         commonInfected.Add(entity);
                     }
@@ -279,7 +279,8 @@ namespace L4D2Menu
             entity.absScreenPosition = World2Screen(currentViewMatrix, entity.abs, (int)windowSize.X, (int)windowSize.Y) + windowLocation;
 
             var entityStringPointer = swed.ReadPointer(entity.address, 0x10);
-            entity.name = encoding.GetString(swed.ReadBytes(entityStringPointer, 10));
+            var nameBytes = swed.ReadBytes(entityStringPointer, 32);
+            entity.name = encoding.GetString(nameBytes).TrimEnd('\0');
             if (entity.maxHealth == 0)
             {
                 entity.maxHealth = entity.health;
