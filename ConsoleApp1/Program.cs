@@ -182,19 +182,26 @@ namespace L4D2Menu
         #region Game Logic & Entities
         private void MainLogic()
         {
-            RECT window;
-            GetWindowRect(swed.GetProcess().MainWindowHandle, out window);
-
-            windowLocation = new Vector2(window.Left, window.Top);
-            windowSize = new Vector2(window.Right - window.Left, window.Bottom - window.Top);
-            lineOrigin = new Vector2(windowLocation.X + windowSize.X / 2, window.Bottom);
-            windowCenter = new Vector2(lineOrigin.X, window.Bottom - windowSize.Y / 2);
+            const int windowUpdateIntervalMs = 100;
+            DateTime lastWindowUpdate = DateTime.MinValue;
 
             client = swed.GetModuleBase("client.dll");
             engine = swed.GetModuleBase("engine.dll");
 
             while (true)
             {
+                if ((DateTime.UtcNow - lastWindowUpdate).TotalMilliseconds >= windowUpdateIntervalMs)
+                {
+                    RECT window;
+                    GetWindowRect(swed.GetProcess().MainWindowHandle, out window);
+
+                    windowLocation = new Vector2(window.Left, window.Top);
+                    windowSize = new Vector2(window.Right - window.Left, window.Bottom - window.Top);
+                    lineOrigin = new Vector2(windowLocation.X + windowSize.X / 2, window.Bottom);
+                    windowCenter = new Vector2(lineOrigin.X, window.Bottom - windowSize.Y / 2);
+                    lastWindowUpdate = DateTime.UtcNow;
+                }
+
                 ReloadEntities();
 
                 if (enableAutoShove)
