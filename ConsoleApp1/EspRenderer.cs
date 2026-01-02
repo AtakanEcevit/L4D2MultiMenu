@@ -31,32 +31,62 @@ namespace L4D2MultiMenu
             {
                 if (ImGui.BeginTabItem("General"))
                 {
-                    ImGui.Checkbox("ESP", ref settings.EnableEsp);
-                    if (settings.EnableEsp)
+                    var enableEsp = settings.EnableEsp;
+                    ImGui.Checkbox("ESP", ref enableEsp);
+                    settings.EnableEsp = enableEsp;
+                    var enableHealthText = settings.EnableHealthText;
+                    if (enableEsp)
                     {
                         ImGui.SameLine();
-                        ImGui.Checkbox("Show health", ref settings.EnableHealthText);
+                        ImGui.Checkbox("Show health", ref enableHealthText);
                     }
-                    ImGui.Checkbox("AutoShove", ref settings.EnableAutoShove);
+                    settings.EnableHealthText = enableHealthText;
+                    var enableAutoShove = settings.EnableAutoShove;
+                    ImGui.Checkbox("AutoShove", ref enableAutoShove);
+                    settings.EnableAutoShove = enableAutoShove;
                     ImGui.EndTabItem();
                 }
 
                 if (ImGui.BeginTabItem("Color Settings"))
                 {
-                    ImGui.ColorPicker4("Survivor Color", ref settings.SurvivorColor);
-                    ImGui.Checkbox("Survivor Line", ref settings.SurvivorLineEnable);
-                    ImGui.Checkbox("Survivor Box", ref settings.SurvivorBoxEnable);
-                    ImGui.Checkbox("Survivor Dot", ref settings.SurvivorDotEnable);
+                    var survivorColor = settings.SurvivorColor;
+                    ImGui.ColorPicker4("Survivor Color", ref survivorColor);
+                    settings.SurvivorColor = survivorColor;
+                    var survivorLineEnable = settings.SurvivorLineEnable;
+                    ImGui.Checkbox("Survivor Line", ref survivorLineEnable);
+                    settings.SurvivorLineEnable = survivorLineEnable;
+                    var survivorBoxEnable = settings.SurvivorBoxEnable;
+                    ImGui.Checkbox("Survivor Box", ref survivorBoxEnable);
+                    settings.SurvivorBoxEnable = survivorBoxEnable;
+                    var survivorDotEnable = settings.SurvivorDotEnable;
+                    ImGui.Checkbox("Survivor Dot", ref survivorDotEnable);
+                    settings.SurvivorDotEnable = survivorDotEnable;
 
-                    ImGui.ColorPicker4("Special Infected Color", ref settings.SpecialInfectedColor);
-                    ImGui.Checkbox("Special Infected Line", ref settings.SpecialInfectedLineEnable);
-                    ImGui.Checkbox("Special Infected Box", ref settings.SpecialInfectedBoxEnable);
-                    ImGui.Checkbox("Special Infected Dot", ref settings.SpecialInfectedDotEnable);
+                    var specialInfectedColor = settings.SpecialInfectedColor;
+                    ImGui.ColorPicker4("Special Infected Color", ref specialInfectedColor);
+                    settings.SpecialInfectedColor = specialInfectedColor;
+                    var specialInfectedLineEnable = settings.SpecialInfectedLineEnable;
+                    ImGui.Checkbox("Special Infected Line", ref specialInfectedLineEnable);
+                    settings.SpecialInfectedLineEnable = specialInfectedLineEnable;
+                    var specialInfectedBoxEnable = settings.SpecialInfectedBoxEnable;
+                    ImGui.Checkbox("Special Infected Box", ref specialInfectedBoxEnable);
+                    settings.SpecialInfectedBoxEnable = specialInfectedBoxEnable;
+                    var specialInfectedDotEnable = settings.SpecialInfectedDotEnable;
+                    ImGui.Checkbox("Special Infected Dot", ref specialInfectedDotEnable);
+                    settings.SpecialInfectedDotEnable = specialInfectedDotEnable;
 
-                    ImGui.ColorPicker4("Common Infected Color", ref settings.CommonInfectedColor);
-                    ImGui.Checkbox("Common Infected Line", ref settings.CommonInfectedLineEnable);
-                    ImGui.Checkbox("Common Infected Box", ref settings.CommonInfectedBoxEnable);
-                    ImGui.Checkbox("Common Infected Dot", ref settings.CommonInfectedDotEnable);
+                    var commonInfectedColor = settings.CommonInfectedColor;
+                    ImGui.ColorPicker4("Common Infected Color", ref commonInfectedColor);
+                    settings.CommonInfectedColor = commonInfectedColor;
+                    var commonInfectedLineEnable = settings.CommonInfectedLineEnable;
+                    ImGui.Checkbox("Common Infected Line", ref commonInfectedLineEnable);
+                    settings.CommonInfectedLineEnable = commonInfectedLineEnable;
+                    var commonInfectedBoxEnable = settings.CommonInfectedBoxEnable;
+                    ImGui.Checkbox("Common Infected Box", ref commonInfectedBoxEnable);
+                    settings.CommonInfectedBoxEnable = commonInfectedBoxEnable;
+                    var commonInfectedDotEnable = settings.CommonInfectedDotEnable;
+                    ImGui.Checkbox("Common Infected Dot", ref commonInfectedDotEnable);
+                    settings.CommonInfectedDotEnable = commonInfectedDotEnable;
 
                     ImGui.EndTabItem();
                 }
