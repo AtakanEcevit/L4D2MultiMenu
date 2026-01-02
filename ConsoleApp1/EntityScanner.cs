@@ -98,8 +98,9 @@ namespace L4D2MultiMenu
             if (entity.maxHealth == 0)
             {
                 entity.maxHealth = entity.health;
-                entity.infectedType = GetInfectedType(entity.maxHealth);
             }
+
+            entity.infectedType = GetInfectedType(entity.name, entity.maxHealth);
         }
 
         private float CalculateMagnitude(Vector3 from, Vector3 destination)
@@ -158,8 +159,23 @@ namespace L4D2MultiMenu
             return viewMatrix;
         }
 
-        private string GetInfectedType(int maxHealth)
+        private string GetInfectedType(string name, int maxHealth)
         {
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                var lowerName = name.ToLowerInvariant();
+
+                if (lowerName.Contains("tank")) return "Tank";
+                if (lowerName.Contains("witch")) return "Witch";
+                if (lowerName.Contains("charger")) return "Charger";
+                if (lowerName.Contains("jockey")) return "Jockey";
+                if (lowerName.Contains("hunter")) return "Hunter";
+                if (lowerName.Contains("smoker")) return "Smoker";
+                if (lowerName.Contains("spitter")) return "Spitter";
+                if (lowerName.Contains("boomer")) return "Boomer";
+                if (lowerName.Contains("infected") || lowerName.Contains("common")) return "Common Infected";
+            }
+
             switch (maxHealth)
             {
                 case 4000: return "Tank";
