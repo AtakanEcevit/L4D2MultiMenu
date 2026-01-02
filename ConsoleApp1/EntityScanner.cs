@@ -1,4 +1,6 @@
 using Swed32;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Text;
 
@@ -9,6 +11,8 @@ namespace L4D2MultiMenu
         private readonly Swed swed;
         private readonly Offsets offsets;
         private readonly Encoding encoding;
+        private readonly Dictionary<IntPtr, int> maxHealthCache = new();
+        private readonly Dictionary<IntPtr, string> infectedTypeCache = new();
 
         private IntPtr client;
         private IntPtr engine;
@@ -32,17 +36,19 @@ namespace L4D2MultiMenu
             state.CommonInfected.Clear();
             state.SpecialInfected.Clear();
             state.Survivors.Clear();
+            var seenEntities = new HashSet<IntPtr>();
 
             state.LocalPlayer.address = swed.ReadPointer(client, offsets.localPlayer);
             UpdateEntity(state.LocalPlayer, state);
 
-            UpdateEntities(state);
+            UpdateEntities(state, seenEntities);
+            PruneCaches(seenEntities);
 
             SortByDistance(state.CommonInfected);
             SortByDistance(state.SpecialInfected);
         }
 
-        private void UpdateEntities(GameState state)
+        private void UpdateEntities(GameState state, HashSet<IntPtr> seenEntities)
         {
             for (int i = 0; i < 850; i++)
             {
@@ -52,6 +58,7 @@ namespace L4D2MultiMenu
                 };
 
                 if (entity.address == IntPtr.Zero) continue;
+                seenEntities.Add(entity.address);
                 UpdateEntity(entity, state);
 
                 if (entity.lifeState < 1) continue;
@@ -95,11 +102,19 @@ namespace L4D2MultiMenu
             var entityStringPointer = swed.ReadPointer(entity.address, 0x10);
             var nameBytes = swed.ReadBytes(entityStringPointer, 32);
             entity.name = encoding.GetString(nameBytes).TrimEnd('\0');
-            if (entity.maxHealth == 0)
+            entity.maxHealth = ResolveMaxHealth(entity.address, entity.health);
+
+            var infectedType = GetInfectedType(entity.name, entity.maxHealth);
+            if (infectedType == "Unknown" && infectedTypeCache.TryGetValue(entity.address, out var cachedType))
             {
-                entity.maxHealth = entity.health;
-                entity.infectedType = GetInfectedType(entity.maxHealth);
+                infectedType = cachedType;
             }
+            else if (infectedType != "Unknown")
+            {
+                infectedTypeCache[entity.address] = infectedType;
+            }
+
+            entity.infectedType = infectedType;
         }
 
         private float CalculateMagnitude(Vector3 from, Vector3 destination)
@@ -158,8 +173,41 @@ namespace L4D2MultiMenu
             return viewMatrix;
         }
 
-        private string GetInfectedType(int maxHealth)
+        private int ResolveMaxHealth(IntPtr address, int currentHealth)
         {
+            if (!maxHealthCache.TryGetValue(address, out var cachedMax))
+            {
+                cachedMax = currentHealth;
+                maxHealthCache[address] = cachedMax;
+                return cachedMax;
+            }
+
+            if (currentHealth > cachedMax)
+            {
+                cachedMax = currentHealth;
+                maxHealthCache[address] = cachedMax;
+            }
+
+            return cachedMax;
+        }
+
+        private string GetInfectedType(string name, int maxHealth)
+        {
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                var lowerName = name.ToLowerInvariant();
+
+                if (lowerName.Contains("tank")) return "Tank";
+                if (lowerName.Contains("witch")) return "Witch";
+                if (lowerName.Contains("charger")) return "Charger";
+                if (lowerName.Contains("jockey")) return "Jockey";
+                if (lowerName.Contains("hunter")) return "Hunter";
+                if (lowerName.Contains("smoker")) return "Smoker";
+                if (lowerName.Contains("spitter")) return "Spitter";
+                if (lowerName.Contains("boomer")) return "Boomer";
+                if (lowerName.Contains("infected") || lowerName.Contains("common")) return "Common Infected";
+            }
+
             switch (maxHealth)
             {
                 case 4000: return "Tank";
@@ -170,6 +218,15 @@ namespace L4D2MultiMenu
                 case 100: return "Spitter";
                 case 50: return "Boomer/Common Infected";
                 default: return "Unknown";
+            }
+        }
+
+        private void PruneCaches(HashSet<IntPtr> seenEntities)
+        {
+            foreach (var address in maxHealthCache.Keys.Where(address => !seenEntities.Contains(address)).ToList())
+            {
+                maxHealthCache.Remove(address);
+                infectedTypeCache.Remove(address);
             }
         }
 
