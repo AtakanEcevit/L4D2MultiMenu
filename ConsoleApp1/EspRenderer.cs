@@ -27,6 +27,15 @@ namespace L4D2MultiMenu
         {
             ImGui.Begin("L4D2 Menu by attackN");
 
+            Vector4 activeColor = new Vector4(0f, 1f, 0f, 1f);
+            Vector4 inactiveColor = new Vector4(1f, 0f, 0f, 1f);
+            string espStatus = settings.EnableEsp ? "ON" : "OFF";
+            string autoShoveStatus = settings.EnableAutoShove ? "ON" : "OFF";
+
+            ImGui.TextColored(settings.EnableEsp ? activeColor : inactiveColor, $"ESP: {espStatus}");
+            ImGui.SameLine();
+            ImGui.TextColored(settings.EnableAutoShove ? activeColor : inactiveColor, $"AutoShove: {autoShoveStatus}");
+
             if (ImGui.BeginTabBar("Tabs"))
             {
                 if (ImGui.BeginTabItem("General"))
