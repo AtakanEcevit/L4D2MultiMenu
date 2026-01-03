@@ -59,6 +59,16 @@ namespace L4D2MultiMenu
                     {
                         settings.EnableAutoShove = enableAutoShove;
                     }
+                    if (settings.EnableAutoShove)
+                    {
+                        ImGui.Indent();
+                        bool requireAutoShoveKey = settings.RequireAutoShoveKey;
+                        if (ImGui.Checkbox("Require AutoShove key (F)", ref requireAutoShoveKey))
+                        {
+                            settings.RequireAutoShoveKey = requireAutoShoveKey;
+                        }
+                        ImGui.Unindent();
+                    }
                     ImGui.EndTabItem();
                 }
 
