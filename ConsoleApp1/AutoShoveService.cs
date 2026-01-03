@@ -32,11 +32,11 @@ namespace L4D2MultiMenu
             engine = swed.GetModuleBase("engine.dll");
         }
 
-        public void TryAutoShove(GameState state)
+        public void TryAutoShove(GameState state, Settings settings)
         {
             bool keyHeld = NativeMethods.GetAsyncKeyState(KEY_TOGGLE_AUTOSHOVE) < 0;
 
-            if (!keyHeld)
+            if (settings.RequireAutoShoveKey && !keyHeld)
             {
                 swed.WriteInt(client, offsets.forceShove, 4);
                 return;
@@ -45,7 +45,7 @@ namespace L4D2MultiMenu
             if (DateTime.Now < nextShoveTime) return;
 
             Entity target = state.SpecialInfected
-                .Where(e => e.health > 0 && e.lifeState > 0 && e.magnitude < SHOVE_RANGE)
+                .Where(e => e.health > 0 && e.lifeState == 0 && e.magnitude < SHOVE_RANGE)
                 .OrderBy(e => e.magnitude)
                 .FirstOrDefault();
 

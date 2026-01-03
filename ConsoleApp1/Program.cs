@@ -70,7 +70,7 @@ namespace L4D2Menu
 
                 if (settings.EnableAutoShove)
                 {
-                    autoShoveService.TryAutoShove(state);
+                    autoShoveService.TryAutoShove(state, settings);
                 }
 
                 Thread.Sleep(5);

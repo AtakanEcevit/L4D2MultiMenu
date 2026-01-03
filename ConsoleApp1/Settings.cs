@@ -6,6 +6,7 @@ namespace L4D2MultiMenu
     {
         public bool EnableEsp { get; set; } = true;
         public bool EnableAutoShove { get; set; } = false;
+        public bool RequireAutoShoveKey { get; set; } = false;
         public bool EnableHealthText { get; set; } = false;
 
         public bool SurvivorLineEnable { get; set; } = true;
