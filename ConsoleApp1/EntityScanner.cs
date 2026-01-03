@@ -54,7 +54,7 @@ namespace L4D2MultiMenu
                 if (entity.address == IntPtr.Zero) continue;
                 UpdateEntity(entity, state);
 
-                if (entity.lifeState != 0) continue;
+                if (entity.lifeState < 1) continue;
 
                 if (entity.teamNum == 2 && entity.health > 0)
                 {
