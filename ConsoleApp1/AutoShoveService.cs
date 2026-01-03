@@ -32,11 +32,11 @@ namespace L4D2MultiMenu
             engine = swed.GetModuleBase("engine.dll");
         }
 
-        public void TryAutoShove(GameState state, Settings settings)
+        public void TryAutoShove(GameState state)
         {
             bool keyHeld = NativeMethods.GetAsyncKeyState(KEY_TOGGLE_AUTOSHOVE) < 0;
 
-            if (settings.RequireAutoShoveKey && !keyHeld)
+            if (!keyHeld)
             {
                 swed.WriteInt(client, offsets.forceShove, 4);
                 return;
@@ -45,7 +45,7 @@ namespace L4D2MultiMenu
             if (DateTime.Now < nextShoveTime) return;
 
             Entity target = state.SpecialInfected
-                .Where(e => e.health > 0 && e.lifeState == 0 && e.magnitude < SHOVE_RANGE)
+                .Where(e => e.health > 0 && e.lifeState > 1 && e.magnitude < SHOVE_RANGE)
                 .OrderBy(e => e.magnitude)
                 .FirstOrDefault();
 
@@ -54,9 +54,9 @@ namespace L4D2MultiMenu
             Vector3 desired = CalculateAngles(state.LocalPlayer.origin,
                                               target.origin - offsetVector);
 
-            if (AngleDiffDeg(ReadLocalAngles(), desired) > SHOVE_FOV) return;
-
             Vector3 cur = ReadLocalAngles();
+            if (AngleDiffDeg(cur, desired) > SHOVE_FOV) return;
+
             Vector3 smooth = LerpAngles(cur, desired, SMOOTH_FACTOR);
             smooth = AddRandomOffset(smooth, 1.0f);
             WriteLocalAngles(smooth);
@@ -83,10 +83,15 @@ namespace L4D2MultiMenu
         private Vector3 LerpAngles(Vector3 from, Vector3 to, float t)
         {
             return new Vector3(
-                from.X + t * (to.X - from.X),
-                from.Y + t * (to.Y - from.Y),
+                from.X + t * ShortestAngleDelta(from.X, to.X),
+                from.Y + t * ShortestAngleDelta(from.Y, to.Y),
                 0
             );
+        }
+
+        private float ShortestAngleDelta(float from, float to)
+        {
+            return NormalizeDeg(to - from);
         }
 
         private Vector3 AddRandomOffset(Vector3 angles, float maxOffset = 1.5f)
