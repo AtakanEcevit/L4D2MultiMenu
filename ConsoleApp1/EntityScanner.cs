@@ -54,7 +54,7 @@ namespace L4D2MultiMenu
                 if (entity.address == IntPtr.Zero) continue;
                 UpdateEntity(entity, state);
 
-                if (entity.lifeState < 1) continue;
+                if (entity.lifeState != 0) continue;
 
                 if (entity.teamNum == 2 && entity.health > 0)
                 {
@@ -78,7 +78,6 @@ namespace L4D2MultiMenu
         private void UpdateEntity(Entity entity, GameState state)
         {
             entity.lifeState = swed.ReadInt(entity.address, offsets.lifeState);
-            if (entity.lifeState < 1) return;
 
             entity.origin = swed.ReadVec(entity.address, offsets.origin);
             entity.viewOffset = swed.ReadVec(entity.address, offsets.viewOffset);
